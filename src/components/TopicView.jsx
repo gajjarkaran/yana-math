@@ -33,37 +33,37 @@ export default function TopicView({ topic, isDone, markDone, toggleDone, topicPr
       )}
 
       {/* Header */}
-      <div className={`bg-gradient-to-br ${grad} text-white px-6 pt-6 pb-10`}>
+      <div className={`bg-gradient-to-br ${grad} text-white px-4 sm:px-6 pt-safe pt-6 pb-10`}>
         <button
           onClick={onBack}
-          className="flex items-center gap-1.5 text-white/80 hover:text-white text-sm mb-5 transition-colors group"
+          className="flex items-center gap-1.5 text-white/80 hover:text-white text-sm mb-4 transition-colors group"
         >
-          <span className="group-hover:-translate-x-1 transition-transform inline-block">←</span> Back to Topics
+          <span className="group-hover:-translate-x-1 transition-transform inline-block">←</span> Back
         </button>
-        <div className="flex items-center gap-4 mb-5">
-          <span className="text-5xl drop-shadow">{topic.emoji}</span>
+        <div className="flex items-center gap-3 mb-5">
+          <span className="text-4xl sm:text-5xl drop-shadow">{topic.emoji}</span>
           <div>
-            <h1 className="text-2xl font-bold leading-tight">{topic.title}</h1>
-            <p className="text-white/70 text-sm mt-0.5">{total} practice problems</p>
+            <h1 className="text-xl sm:text-2xl font-bold leading-tight">{topic.title}</h1>
+            <p className="text-white/70 text-xs sm:text-sm mt-0.5">{total} practice problems</p>
           </div>
         </div>
         <ProgressBar completed={completed} total={total} color="indigo" />
       </div>
 
-      <div className="max-w-2xl mx-auto px-4 -mt-4 pb-10 space-y-5">
-        {/* Description card */}
-        <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+      <div className="max-w-2xl mx-auto px-4 -mt-4 pb-16 sm:pb-10 space-y-4">
+        {/* Description */}
+        <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-gray-100">
           <p className="text-gray-600 leading-relaxed text-sm">{topic.description}</p>
         </div>
 
         {/* Formulas */}
-        <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
-          <h2 className="font-bold text-gray-700 mb-4 text-xs uppercase tracking-widest">📌 Key Formulas</h2>
+        <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-gray-100">
+          <h2 className="font-bold text-gray-700 mb-3 text-xs uppercase tracking-widest">📌 Key Formulas</h2>
           <div className="space-y-2.5">
             {topic.formulas.map((f, i) => (
-              <div key={i} className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
-                <span className="text-xs text-gray-500 sm:w-52 shrink-0">{f.name}</span>
-                <code className="text-sm bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-gray-800 font-mono flex-1">
+              <div key={i} className="flex flex-col gap-1">
+                <span className="text-xs text-gray-500 font-medium">{f.name}</span>
+                <code className="text-sm bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-gray-800 font-mono break-words">
                   {f.formula}
                 </code>
               </div>

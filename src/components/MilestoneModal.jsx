@@ -15,7 +15,6 @@ export default function MilestoneModal({ topic, onClose }) {
   const msg = useRef(messages[Math.floor(Math.random() * messages.length)]).current;
 
   useEffect(() => {
-    // burst confetti from both sides
     confetti({ particleCount: 80, angle: 60, spread: 70, origin: { x: 0, y: 0.6 } });
     confetti({ particleCount: 80, angle: 120, spread: 70, origin: { x: 1, y: 0.6 } });
     const t = setTimeout(onClose, 5000);
@@ -24,24 +23,24 @@ export default function MilestoneModal({ topic, onClose }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4"
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-3xl shadow-2xl p-10 max-w-sm w-full mx-4 text-center"
+        className="bg-white rounded-3xl shadow-2xl p-6 sm:p-10 max-w-sm w-full text-center"
         style={{ animation: 'popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)' }}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="text-7xl mb-4 animate-bounce">🎊</div>
+        <div className="text-6xl sm:text-7xl mb-3 animate-bounce">🎊</div>
         <div className="inline-block bg-indigo-100 text-indigo-700 text-xs font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-wide">
           Topic Complete!
         </div>
-        <h2 className="text-xl font-bold text-gray-800 mb-1">{topic}</h2>
-        <p className="text-gray-700 mt-3 text-base font-semibold">{msg.line1}</p>
-        <p className="text-gray-400 mt-1 text-sm">{msg.line2}</p>
+        <h2 className="text-lg sm:text-xl font-bold text-gray-800 mb-1">{topic}</h2>
+        <p className="text-gray-700 mt-3 text-sm sm:text-base font-semibold">{msg.line1}</p>
+        <p className="text-gray-400 mt-1 text-xs sm:text-sm">{msg.line2}</p>
         <button
           onClick={onClose}
-          className="mt-6 px-8 py-2.5 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-full text-sm font-bold hover:opacity-90 transition-opacity shadow-lg"
+          className="mt-5 px-8 py-3 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-full text-sm font-bold active:opacity-80 transition-opacity shadow-lg touch-manipulation w-full sm:w-auto"
         >
           Keep Going! →
         </button>

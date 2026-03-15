@@ -33,29 +33,28 @@ export default function App() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero */}
-      <div className="bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 text-white px-6 pt-10 pb-10 text-center relative overflow-hidden">
-        {/* decorative blobs */}
+      <div className="bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 text-white px-4 sm:px-6 pt-10 pb-10 text-center relative overflow-hidden">
         <div className="absolute top-0 left-0 w-64 h-64 bg-white/5 rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
         <div className="absolute bottom-0 right-0 w-48 h-48 bg-white/5 rounded-full translate-x-1/4 translate-y-1/4 pointer-events-none" />
 
         <div className="relative">
-          <p className="text-indigo-200 text-sm font-semibold mb-1 uppercase tracking-widest">Personal Math Guide</p>
-          <h1 className="text-4xl font-extrabold mb-1 drop-shadow">Hi, Yana! 👋</h1>
-          <p className="text-indigo-100 text-base mb-8">Your personal math space. Learn, practice, and level up. 🧠</p>
+          <p className="text-indigo-200 text-xs sm:text-sm font-semibold mb-1 uppercase tracking-widest">Personal Math Guide</p>
+          <h1 className="text-3xl sm:text-4xl font-extrabold mb-1 drop-shadow">Hi, Yana! 👋</h1>
+          <p className="text-indigo-100 text-sm sm:text-base mb-6">Your personal math space. Learn, practice, and level up. 🧠</p>
 
           {/* Stats row */}
-          <div className="flex justify-center gap-4 mb-8 flex-wrap">
-            <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-5 py-3 text-center min-w-[90px]">
-              <p className="text-2xl font-extrabold">{totalDone}</p>
-              <p className="text-xs text-white/70 mt-0.5">Problems Done</p>
+          <div className="flex justify-center gap-3 mb-6 flex-wrap">
+            <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-4 py-3 text-center min-w-[80px]">
+              <p className="text-xl sm:text-2xl font-extrabold">{totalDone}</p>
+              <p className="text-xs text-white/70 mt-0.5">Done</p>
             </div>
-            <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-5 py-3 text-center min-w-[90px]">
-              <p className="text-2xl font-extrabold">{streak}</p>
+            <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-4 py-3 text-center min-w-[80px]">
+              <p className="text-xl sm:text-2xl font-extrabold">{streak}</p>
               <p className="text-xs text-white/70 mt-0.5">🔥 Streak</p>
             </div>
-            <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-5 py-3 text-center min-w-[90px]">
-              <p className="text-2xl font-extrabold">{completedTopics}/{topics.length}</p>
-              <p className="text-xs text-white/70 mt-0.5">Topics Done</p>
+            <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-4 py-3 text-center min-w-[80px]">
+              <p className="text-xl sm:text-2xl font-extrabold">{completedTopics}/{topics.length}</p>
+              <p className="text-xs text-white/70 mt-0.5">Topics</p>
             </div>
           </div>
 
@@ -65,9 +64,9 @@ export default function App() {
               <span className="text-white/80 font-medium">Overall Progress</span>
               <span className="font-extrabold">{overallPct}%</span>
             </div>
-            <div className="w-full h-4 bg-white/30 rounded-full overflow-hidden">
+            <div className="w-full h-3 sm:h-4 bg-white/30 rounded-full overflow-hidden">
               <div
-                className="h-4 bg-white rounded-full transition-all duration-700 ease-out"
+                className="h-full bg-white rounded-full transition-all duration-700 ease-out"
                 style={{ width: `${overallPct}%` }}
               />
             </div>
@@ -77,12 +76,12 @@ export default function App() {
       </div>
 
       {/* Topics grid */}
-      <div className="max-w-2xl mx-auto px-4 pt-8 pb-10">
+      <div className="max-w-2xl mx-auto px-4 pt-6 pb-16 sm:pb-10">
         <div className="flex items-center justify-between mb-5">
-          <h2 className="font-extrabold text-gray-900 text-base uppercase tracking-widest">Topics</h2>
+          <h2 className="font-extrabold text-gray-900 text-sm sm:text-base uppercase tracking-widest">Topics</h2>
           <button
             onClick={() => { if (window.confirm('Reset all progress? This cannot be undone.')) resetAll(); }}
-            className="text-xs font-semibold text-red-400 hover:text-red-600 border border-red-200 hover:border-red-400 px-3 py-1 rounded-full transition-colors"
+            className="text-xs font-semibold text-red-400 hover:text-red-600 border border-red-200 hover:border-red-400 px-3 py-1.5 rounded-full transition-colors"
           >
             Reset progress
           </button>
