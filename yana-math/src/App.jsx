@@ -31,7 +31,7 @@ export default function App() {
       <div className="bg-gradient-to-br from-indigo-500 to-purple-600 text-white px-6 py-10 text-center">
         <p className="text-indigo-200 text-sm font-medium mb-1">Personal Math Guide</p>
         <h1 className="text-3xl font-bold mb-1">Hi, Yana Mistry! 👋</h1>
-        <p className="text-indigo-100 text-base mb-6">Ready to practice some math today?</p>
+        <p className="text-indigo-100 text-base mb-6">Your personal math space. Learn, practice, and level up. 🧠</p>
 
         {/* Overall progress */}
         <div className="max-w-xs mx-auto bg-white/20 rounded-2xl p-4">
@@ -74,7 +74,7 @@ export default function App() {
         </div>
 
         <p className="text-center text-xs text-gray-400 mt-8">
-          Made with ❤️ for Yana Mistry · Grade 6 Math
+          Yana's Math Space · Grade 6 · Keep going, you've got this 💫
         </p>
       </div>
     </div>

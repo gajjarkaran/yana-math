@@ -1,13 +1,13 @@
 import { useEffect } from 'react';
 
 const messages = [
-  "You're on fire, Yana! 🔥 Keep it up!",
-  "Nailed it, Yana! 🌟 You're a math star!",
-  "Amazing work, Yana! 🎉 You crushed it!",
-  "Yana, you're unstoppable! 💪 Brilliant job!",
-  "Wow, Yana! 🏆 That's what we call a math champion!",
-  "Fantastic, Yana! ✨ You make math look easy!",
-  "Yana, you're absolutely killing it! 🚀",
+  { line1: "You're on fire, Yana! 🔥", line2: "One more topic down — nothing can stop you now." },
+  { line1: "Math star alert! 🌟", line2: "Yana Mistry just owned this topic. Seriously impressive." },
+  { line1: "That's what I'm talking about! 🎉", line2: "Every problem you solve makes the next one easier." },
+  { line1: "Unstoppable. 💪", line2: "Yana, your brain is getting stronger with every answer." },
+  { line1: "Champion energy! 🏆", line2: "You didn't just finish — you understood it. Big difference." },
+  { line1: "Look at you go, Yana! ✨", line2: "This is exactly how math gets easier — one topic at a time." },
+  { line1: "Boom! Another one done. 🚀", line2: "Keep this up and there's nothing in Grade 6 you can't handle." },
 ];
 
 export default function MilestoneModal({ topic, onClose }) {
@@ -24,7 +24,8 @@ export default function MilestoneModal({ topic, onClose }) {
         <div className="text-6xl mb-4">🎊</div>
         <h2 className="text-2xl font-bold text-gray-800 mb-2">Topic Complete!</h2>
         <p className="text-lg text-gray-600 mb-1 font-medium">{topic}</p>
-        <p className="text-gray-500 mt-3 text-base">{msg}</p>
+        <p className="text-gray-500 mt-3 text-base font-medium">{msg.line1}</p>
+        <p className="text-gray-400 mt-1 text-sm">{msg.line2}</p>
         <button
           onClick={onClose}
           className="mt-6 px-6 py-2 bg-indigo-500 text-white rounded-full text-sm font-semibold hover:bg-indigo-600 transition-colors"
