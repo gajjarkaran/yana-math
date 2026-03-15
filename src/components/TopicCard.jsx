@@ -18,7 +18,7 @@ export default function TopicCard({ topic, progress, onClick }) {
   return (
     <button
       onClick={onClick}
-      className="w-full text-left bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden group"
+      className="w-full text-left bg-white dark:bg-slate-700 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden group"
     >
       {/* colored header */}
       <div className={`bg-gradient-to-br ${grad} px-5 pt-5 pb-5 relative`}>
@@ -31,7 +31,7 @@ export default function TopicCard({ topic, progress, onClick }) {
       </div>
 
       {/* progress section */}
-      <div className="px-5 py-4 bg-white relative">
+      <div className="px-5 py-4 bg-white dark:bg-slate-700 relative">
         <ProgressBar completed={completed} total={total} color={topic.color} />
       </div>
     </button>

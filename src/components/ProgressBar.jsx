@@ -12,18 +12,18 @@ export default function ProgressBar({ completed, total, color = 'indigo', onDark
     indigo: 'from-white to-white',
   }[color] || 'from-indigo-400 to-purple-500';
 
-  const trackColor = onDark ? 'bg-white/30' : {
-    rose:   'bg-rose-100',
-    amber:  'bg-amber-100',
-    green:  'bg-green-100',
-    purple: 'bg-purple-100',
-    sky:    'bg-sky-100',
-    orange: 'bg-orange-100',
-    teal:   'bg-teal-100',
-    indigo: 'bg-indigo-100',
-  }[color] || 'bg-gray-100';
+  const trackColor = onDark ? 'bg-white/30' : ({
+    rose:   'bg-rose-100 dark:bg-rose-900/40',
+    amber:  'bg-amber-100 dark:bg-amber-900/40',
+    green:  'bg-green-100 dark:bg-green-900/40',
+    purple: 'bg-purple-100 dark:bg-purple-900/40',
+    sky:    'bg-sky-100 dark:bg-sky-900/40',
+    orange: 'bg-orange-100 dark:bg-orange-900/40',
+    teal:   'bg-teal-100 dark:bg-teal-900/40',
+    indigo: 'bg-indigo-100 dark:bg-indigo-900/40',
+  }[color] || 'bg-gray-100 dark:bg-gray-700');
 
-  const labelColor = onDark ? 'text-white/70' : 'text-gray-500';
+  const labelColor = onDark ? 'text-white/70' : 'text-gray-500 dark:text-gray-400';
 
   return (
     <div className="w-full">
@@ -31,7 +31,7 @@ export default function ProgressBar({ completed, total, color = 'indigo', onDark
         <span className={`text-xs font-semibold ${labelColor}`}>
           {completed}/{total} done
         </span>
-        <span className={`text-xs font-bold ${onDark ? 'text-white' : 'text-gray-700'}`}>
+        <span className={`text-xs font-bold ${onDark ? 'text-white' : 'text-gray-700 dark:text-gray-300'}`}>
           {pct}%
         </span>
       </div>

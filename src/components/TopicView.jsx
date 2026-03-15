@@ -13,8 +13,9 @@ const gradients = {
   teal:   'from-teal-400 to-cyan-500',
 };
 
-export default function TopicView({ topic, isDone, markDone, toggleDone, topicProgress, onBack, resetKey }) {
+export default function TopicView({ topic, isDone, markDone, toggleDone, topicProgress, getShuffledProblems, onBack, resetKey, dark, toggleDark }) {
   const [showMilestone, setShowMilestone] = useState(false);
+  const problems = getShuffledProblems(topic);
   const { completed, total } = topicProgress(topic.problems);
   const prevCompleted = useRef(completed);
   const grad = gradients[topic.color] || 'from-indigo-400 to-purple-500';
@@ -31,21 +32,28 @@ export default function TopicView({ topic, isDone, markDone, toggleDone, topicPr
   }, [completed, total]);
 
   return (
-    <div className="min-h-screen bg-gray-50" style={{ animation: 'slideInRight 0.3s ease' }}>
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-800 transition-colors duration-300" style={{ animation: 'slideInRight 0.3s ease' }}>
       {showMilestone && (
         <MilestoneModal topic={topic.title} onClose={() => setShowMilestone(false)} />
       )}
 
       {/* Header */}
       <div className={`bg-gradient-to-br ${grad} text-white px-4 sm:px-6 pb-6`}>
-        {/* Back button row — sticky feel with top padding for status bar */}
-        <div className="pt-5 pb-2">
+        {/* Back button + dark toggle row */}
+        <div className="pt-5 pb-2 flex items-center justify-between">
           <button
             onClick={onBack}
             className="inline-flex items-center gap-2 text-white/80 hover:text-white text-sm font-medium transition-colors group bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full"
           >
             <span className="group-hover:-translate-x-0.5 transition-transform inline-block">←</span>
             Back to Topics
+          </button>
+          <button
+            onClick={toggleDark}
+            title={dark ? 'Switch to light mode' : 'Switch to dark mode'}
+            className="text-lg w-9 h-9 flex items-center justify-center rounded-full bg-white/20 hover:bg-white/30 transition-colors touch-manipulation"
+          >
+            {dark ? '☀️' : '🌙'}
           </button>
         </div>
 
@@ -62,21 +70,21 @@ export default function TopicView({ topic, isDone, markDone, toggleDone, topicPr
 
       <div className="max-w-2xl mx-auto px-4 pb-16 sm:pb-10 space-y-4 mt-4">
         {/* Description */}
-        <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-gray-100">
-          <p className="text-gray-600 leading-relaxed text-sm">{topic.description}</p>
+        <div className="bg-white dark:bg-slate-700 rounded-2xl p-4 sm:p-5 shadow-sm border border-gray-100 dark:border-slate-600">
+          <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-sm">{topic.description}</p>
         </div>
 
         {/* Formulas */}
-        <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-gray-100">
+        <div className="bg-white dark:bg-slate-700 rounded-2xl p-4 sm:p-5 shadow-sm border border-gray-100 dark:border-slate-600">
           <div className="flex items-center gap-2 mb-4">
             <span className="text-lg">📌</span>
-            <h2 className="font-extrabold text-gray-800 text-sm uppercase tracking-wider">Key Formulas</h2>
+            <h2 className="font-extrabold text-gray-800 dark:text-gray-100 text-sm uppercase tracking-wider">Key Formulas</h2>
           </div>
           <div className="space-y-3">
             {topic.formulas.map((f, i) => (
-              <div key={i} className="border-l-4 border-indigo-300 pl-3 flex flex-col gap-1">
-                <span className="text-xs text-gray-500 font-semibold">{f.name}</span>
-                <code className="text-sm bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-gray-800 font-mono break-words">
+              <div key={i} className="border-l-4 border-indigo-300 dark:border-indigo-500 pl-3 flex flex-col gap-1">
+                <span className="text-xs text-gray-500 dark:text-gray-400 font-semibold">{f.name}</span>
+                <code className="text-sm bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-600 rounded-xl px-3 py-2 text-gray-800 dark:text-gray-200 font-mono break-words">
                   {f.formula}
                 </code>
               </div>
@@ -88,10 +96,10 @@ export default function TopicView({ topic, isDone, markDone, toggleDone, topicPr
         <div>
           <div className="flex items-center gap-2 mb-4">
             <span className="text-lg">🧠</span>
-            <h2 className="font-extrabold text-gray-800 text-sm uppercase tracking-wider">Practice Problems</h2>
+            <h2 className="font-extrabold text-gray-800 dark:text-gray-100 text-sm uppercase tracking-wider">Practice Problems</h2>
           </div>
           <div className="space-y-4">
-            {topic.problems.map((problem, i) => (
+            {problems.map((problem, i) => (
               <ProblemCard
                 key={`${resetKey}-${problem.id}`}
                 problem={problem}
