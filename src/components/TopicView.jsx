@@ -20,6 +20,10 @@ export default function TopicView({ topic, isDone, markDone, toggleDone, topicPr
   const grad = gradients[topic.color] || 'from-indigo-400 to-purple-500';
 
   useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, []);
+
+  useEffect(() => {
     if (prevCompleted.current !== total && completed === total && total > 0) {
       setShowMilestone(true);
     }
@@ -33,7 +37,7 @@ export default function TopicView({ topic, isDone, markDone, toggleDone, topicPr
       )}
 
       {/* Header */}
-      <div className={`bg-gradient-to-br ${grad} text-white px-4 sm:px-6 pt-safe pt-6 pb-10`}>
+      <div className={`bg-gradient-to-br ${grad} text-white px-4 sm:px-6 pt-safe pt-6 pb-6`}>
         <button
           onClick={onBack}
           className="flex items-center gap-1.5 text-white/80 hover:text-white text-sm mb-4 transition-colors group"
@@ -47,10 +51,10 @@ export default function TopicView({ topic, isDone, markDone, toggleDone, topicPr
             <p className="text-white/70 text-xs sm:text-sm mt-0.5">{total} practice problems</p>
           </div>
         </div>
-        <ProgressBar completed={completed} total={total} color="indigo" />
+        <ProgressBar completed={completed} total={total} color="indigo" onDark={true} />
       </div>
 
-      <div className="max-w-2xl mx-auto px-4 -mt-4 pb-16 sm:pb-10 space-y-4">
+      <div className="max-w-2xl mx-auto px-4 pb-16 sm:pb-10 space-y-4 mt-4">
         {/* Description */}
         <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-gray-100">
           <p className="text-gray-600 leading-relaxed text-sm">{topic.description}</p>

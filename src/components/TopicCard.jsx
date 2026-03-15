@@ -31,7 +31,7 @@ export default function TopicCard({ topic, progress, onClick }) {
       </div>
 
       {/* progress section */}
-      <div className="px-5 py-4 -mt-4 bg-white rounded-t-2xl relative">
+      <div className="px-5 py-4 bg-white rounded-t-2xl relative">
         <ProgressBar completed={completed} total={total} color={topic.color} />
       </div>
     </button>

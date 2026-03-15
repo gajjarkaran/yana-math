@@ -24,7 +24,7 @@ export default function App() {
         markDone={markDone}
         toggleDone={toggleDone}
         topicProgress={topicProgress}
-        onBack={() => setActiveTopic(null)}
+        onBack={() => { setActiveTopic(null); window.scrollTo({ top: 0, behavior: 'instant' }); }}
         resetKey={resetKey}
       />
     );
