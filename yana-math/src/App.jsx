@@ -6,11 +6,15 @@ import TopicView from './components/TopicView';
 
 export default function App() {
   const [activeTopic, setActiveTopic] = useState(null);
-  const { markDone, toggleDone, isDone, topicProgress, resetAll } = useProgress();
+  const { markDone, toggleDone, isDone, topicProgress, resetAll, streak } = useProgress();
 
   const totalProblems = topics.reduce((sum, t) => sum + t.problems.length, 0);
   const totalDone = topics.reduce((sum, t) => sum + topicProgress(t.problems).completed, 0);
   const overallPct = Math.round((totalDone / totalProblems) * 100);
+  const completedTopics = topics.filter(t => {
+    const { completed, total } = topicProgress(t.problems);
+    return completed === total && total > 0;
+  }).length;
 
   if (activeTopic) {
     return (
@@ -28,34 +32,56 @@ export default function App() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero */}
-      <div className="bg-gradient-to-br from-indigo-500 to-purple-600 text-white px-6 py-10 text-center">
-        <p className="text-indigo-200 text-sm font-medium mb-1">Personal Math Guide</p>
-        <h1 className="text-3xl font-bold mb-1">Hi, Yana Mistry! 👋</h1>
-        <p className="text-indigo-100 text-base mb-6">Your personal math space. Learn, practice, and level up. 🧠</p>
+      <div className="bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 text-white px-6 pt-10 pb-16 text-center relative overflow-hidden">
+        {/* decorative blobs */}
+        <div className="absolute top-0 left-0 w-64 h-64 bg-white/5 rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
+        <div className="absolute bottom-0 right-0 w-48 h-48 bg-white/5 rounded-full translate-x-1/4 translate-y-1/4 pointer-events-none" />
 
-        {/* Overall progress */}
-        <div className="max-w-xs mx-auto bg-white/20 rounded-2xl p-4">
-          <div className="flex justify-between text-sm mb-2">
-            <span className="text-white/80">Overall Progress</span>
-            <span className="font-bold">{overallPct}%</span>
+        <div className="relative">
+          <p className="text-indigo-200 text-sm font-semibold mb-1 uppercase tracking-widest">Personal Math Guide</p>
+          <h1 className="text-4xl font-extrabold mb-1 drop-shadow">Hi, Yana! 👋</h1>
+          <p className="text-indigo-100 text-base mb-8">Your personal math space. Learn, practice, and level up. 🧠</p>
+
+          {/* Stats row */}
+          <div className="flex justify-center gap-4 mb-8 flex-wrap">
+            <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-5 py-3 text-center min-w-[90px]">
+              <p className="text-2xl font-extrabold">{totalDone}</p>
+              <p className="text-xs text-white/70 mt-0.5">Problems Done</p>
+            </div>
+            <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-5 py-3 text-center min-w-[90px]">
+              <p className="text-2xl font-extrabold">{streak}</p>
+              <p className="text-xs text-white/70 mt-0.5">🔥 Streak</p>
+            </div>
+            <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-5 py-3 text-center min-w-[90px]">
+              <p className="text-2xl font-extrabold">{completedTopics}/{topics.length}</p>
+              <p className="text-xs text-white/70 mt-0.5">Topics Done</p>
+            </div>
           </div>
-          <div className="w-full h-3 bg-white/30 rounded-full">
-            <div
-              className="h-3 bg-white rounded-full transition-all duration-500"
-              style={{ width: `${overallPct}%` }}
-            />
+
+          {/* Overall progress */}
+          <div className="max-w-xs mx-auto bg-white/20 backdrop-blur-sm rounded-2xl p-4">
+            <div className="flex justify-between text-sm mb-2">
+              <span className="text-white/80 font-medium">Overall Progress</span>
+              <span className="font-extrabold">{overallPct}%</span>
+            </div>
+            <div className="w-full h-4 bg-white/30 rounded-full overflow-hidden">
+              <div
+                className="h-4 bg-white rounded-full transition-all duration-700 ease-out"
+                style={{ width: `${overallPct}%` }}
+              />
+            </div>
+            <p className="text-xs text-white/60 mt-1.5">{totalDone} of {totalProblems} problems done</p>
           </div>
-          <p className="text-xs text-white/70 mt-1.5">{totalDone} of {totalProblems} problems done</p>
         </div>
       </div>
 
       {/* Topics grid */}
-      <div className="max-w-2xl mx-auto px-4 py-6">
+      <div className="max-w-2xl mx-auto px-4 -mt-6 pb-10">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="font-semibold text-gray-700">Topics</h2>
+          <h2 className="font-bold text-gray-700 text-sm uppercase tracking-widest">Topics</h2>
           {totalDone > 0 && (
             <button
-              onClick={() => { if (window.confirm('Reset all progress?')) resetAll(); }}
+              onClick={() => { if (window.confirm('Reset all progress? This cannot be undone.')) resetAll(); }}
               className="text-xs text-gray-400 hover:text-red-400 transition-colors"
             >
               Reset progress
@@ -73,7 +99,7 @@ export default function App() {
           ))}
         </div>
 
-        <p className="text-center text-xs text-gray-400 mt-8">
+        <p className="text-center text-xs text-gray-400 mt-10">
           Yana's Math Space · Grade 6 · Keep going, you've got this 💫
         </p>
       </div>
