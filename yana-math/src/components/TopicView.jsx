@@ -13,7 +13,7 @@ const gradients = {
   teal:   'from-teal-400 to-cyan-500',
 };
 
-export default function TopicView({ topic, isDone, markDone, toggleDone, topicProgress, onBack }) {
+export default function TopicView({ topic, isDone, markDone, toggleDone, topicProgress, onBack, resetKey }) {
   const [showMilestone, setShowMilestone] = useState(false);
   const { completed, total } = topicProgress(topic.problems);
   const prevCompleted = useRef(completed);
@@ -77,7 +77,7 @@ export default function TopicView({ topic, isDone, markDone, toggleDone, topicPr
           <div className="space-y-4">
             {topic.problems.map((problem, i) => (
               <ProblemCard
-                key={problem.id}
+                key={`${resetKey}-${problem.id}`}
                 problem={problem}
                 index={i}
                 color={topic.color}

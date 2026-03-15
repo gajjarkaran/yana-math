@@ -14,6 +14,8 @@ export function useProgress() {
     catch { return 0; }
   });
 
+  const [resetKey, setResetKey] = useState(0);
+
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(done));
   }, [done]);
@@ -49,7 +51,10 @@ export function useProgress() {
   const resetAll = () => {
     setDone({});
     setStreak(0);
+    setResetKey((k) => k + 1);
+    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(STREAK_KEY);
   };
 
-  return { markDone, toggleDone, isDone, topicProgress, resetAll, streak };
+  return { markDone, toggleDone, isDone, topicProgress, resetAll, streak, resetKey };
 }

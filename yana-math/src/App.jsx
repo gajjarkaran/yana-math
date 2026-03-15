@@ -6,7 +6,7 @@ import TopicView from './components/TopicView';
 
 export default function App() {
   const [activeTopic, setActiveTopic] = useState(null);
-  const { markDone, toggleDone, isDone, topicProgress, resetAll, streak } = useProgress();
+  const { markDone, toggleDone, isDone, topicProgress, resetAll, streak, resetKey } = useProgress();
 
   const totalProblems = topics.reduce((sum, t) => sum + t.problems.length, 0);
   const totalDone = topics.reduce((sum, t) => sum + topicProgress(t.problems).completed, 0);
@@ -25,6 +25,7 @@ export default function App() {
         toggleDone={toggleDone}
         topicProgress={topicProgress}
         onBack={() => setActiveTopic(null)}
+        resetKey={resetKey}
       />
     );
   }
@@ -32,7 +33,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero */}
-      <div className="bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 text-white px-6 pt-10 pb-16 text-center relative overflow-hidden">
+      <div className="bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 text-white px-6 pt-10 pb-10 text-center relative overflow-hidden">
         {/* decorative blobs */}
         <div className="absolute top-0 left-0 w-64 h-64 bg-white/5 rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
         <div className="absolute bottom-0 right-0 w-48 h-48 bg-white/5 rounded-full translate-x-1/4 translate-y-1/4 pointer-events-none" />
@@ -76,17 +77,15 @@ export default function App() {
       </div>
 
       {/* Topics grid */}
-      <div className="max-w-2xl mx-auto px-4 -mt-6 pb-10">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="font-bold text-gray-700 text-sm uppercase tracking-widest">Topics</h2>
-          {totalDone > 0 && (
-            <button
-              onClick={() => { if (window.confirm('Reset all progress? This cannot be undone.')) resetAll(); }}
-              className="text-xs text-gray-400 hover:text-red-400 transition-colors"
-            >
-              Reset progress
-            </button>
-          )}
+      <div className="max-w-2xl mx-auto px-4 pt-8 pb-10">
+        <div className="flex items-center justify-between mb-5">
+          <h2 className="font-extrabold text-gray-900 text-base uppercase tracking-widest">Topics</h2>
+          <button
+            onClick={() => { if (window.confirm('Reset all progress? This cannot be undone.')) resetAll(); }}
+            className="text-xs font-semibold text-red-400 hover:text-red-600 border border-red-200 hover:border-red-400 px-3 py-1 rounded-full transition-colors"
+          >
+            Reset progress
+          </button>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {topics.map((topic) => (
