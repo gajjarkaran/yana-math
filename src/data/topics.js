@@ -10,21 +10,21 @@ export const topics = [
       { name: 'Adding/Subtracting (different denominators)', formula: 'Find LCD, convert, then add/subtract numerators' },
       { name: 'Multiplying', formula: 'a/b × c/d = (a×c)/(b×d)' },
       { name: 'Dividing (flip and multiply)', formula: 'a/b ÷ c/d = a/b × d/c' },
-      { name: 'GCF', formula: 'Greatest Common Factor — largest number that divides both' },
-      { name: 'LCM', formula: 'Least Common Multiple — smallest number both divide into' },
+      { name: 'GCF', formula: 'Greatest Common Factor: the largest number that divides both' },
+      { name: 'LCM', formula: 'Least Common Multiple: the smallest number both divide into' },
     ],
     problems: [
       {
         id: 'f1',
         question: 'What is 3/8 + 1/8?',
         answer: '4/8 = 1/2',
-        steps: ['Same denominator (8) — add numerators: 3 + 1 = 4', 'Result: 4/8', 'Simplify: GCF of 4 and 8 is 4 → 4÷4 = 1, 8÷4 = 2', 'Answer: 1/2'],
+        steps: ['Same denominator (8), so add numerators: 3 + 1 = 4', 'Result: 4/8', 'Simplify: GCF of 4 and 8 is 4 → 4÷4 = 1, 8÷4 = 2', 'Answer: 1/2'],
       },
       {
         id: 'f2',
         question: 'What is 2/3 + 1/4?',
         answer: '11/12',
-        steps: ['Different denominators — find LCD of 3 and 4.', 'LCD = 12', 'Convert: 2/3 = 8/12 and 1/4 = 3/12', 'Add: 8/12 + 3/12 = 11/12'],
+        steps: ['Different denominators, so find LCD of 3 and 4.', 'LCD = 12', 'Convert: 2/3 = 8/12 and 1/4 = 3/12', 'Add: 8/12 + 3/12 = 11/12'],
       },
       {
         id: 'f3',
@@ -322,7 +322,7 @@ export const topics = [
     title: 'Percentages',
     emoji: '%',
     color: 'purple',
-    description: 'Percent means "per hundred" — it is a rate per 100. Grade 6 covers finding a percent of a number, finding the whole when given a part and percent, and percent change.',
+    description: 'Percent means "per hundred". It is a rate per 100. Grade 6 covers finding a percent of a number, finding the whole when given a part and percent, and percent change.',
     formulas: [
       { name: 'Percent to decimal', formula: 'Divide by 100 (move decimal 2 places left)' },
       { name: 'Decimal to percent', formula: 'Multiply by 100 (move decimal 2 places right)' },
@@ -631,7 +631,7 @@ export const topics = [
       {
         id: 'i15',
         question: 'What is −5 + 5? What does this tell you about opposites?',
-        answer: '0 — opposites sum to zero',
+        answer: '0. Opposites always sum to zero.',
         steps: ['−5 and +5 are opposites (same distance from 0, opposite sides).', 'Any number plus its opposite = 0.', '−5 + 5 = 0'],
       },
     ],
@@ -738,7 +738,7 @@ export const topics = [
       {
         id: 'e15',
         question: 'Are y + y + y and 3y equivalent expressions? Explain.',
-        answer: 'Yes — both equal 3y for any value of y',
+        answer: 'Yes. Both equal 3y for any value of y.',
         steps: ['y + y + y means adding y three times.', 'That is the same as 3 × y = 3y.', 'Substitute any value, e.g. y=5: 5+5+5=15 and 3×5=15 ✓'],
       },
     ],

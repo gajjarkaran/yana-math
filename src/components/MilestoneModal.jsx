@@ -2,12 +2,12 @@ import { useEffect, useRef } from 'react';
 import confetti from 'canvas-confetti';
 
 const messages = [
-  { line1: "You're on fire, Yana! 🔥", line2: "One more topic down — nothing can stop you now." },
+  { line1: "You're on fire, Yana! 🔥", line2: "One more topic down. Nothing can stop you now." },
   { line1: "Math star alert! 🌟", line2: "Yana Mistry just owned this topic. Seriously impressive." },
   { line1: "That's what I'm talking about! 🎉", line2: "Every problem you solve makes the next one easier." },
   { line1: "Unstoppable. 💪", line2: "Yana, your brain is getting stronger with every answer." },
-  { line1: "Champion energy! 🏆", line2: "You didn't just finish — you understood it. Big difference." },
-  { line1: "Look at you go, Yana! ✨", line2: "This is exactly how math gets easier — one topic at a time." },
+  { line1: "Champion energy! 🏆", line2: "You didn't just finish. You understood it. Big difference." },
+  { line1: "Look at you go, Yana! ✨", line2: "This is exactly how math gets easier. One topic at a time." },
   { line1: "Boom! Another one done. 🚀", line2: "Keep this up and there's nothing in Grade 6 you can't handle." },
 ];
 
@@ -27,7 +27,7 @@ export default function MilestoneModal({ topic, onClose }) {
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-3xl shadow-2xl p-6 sm:p-10 max-w-sm w-full text-center"
+        className="bg-white rounded-3xl shadow-2xl p-8 max-w-sm w-full text-center"
         style={{ animation: 'popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)' }}
         onClick={(e) => e.stopPropagation()}
       >

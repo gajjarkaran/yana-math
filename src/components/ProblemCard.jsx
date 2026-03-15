@@ -39,7 +39,7 @@ export default function ProblemCard({ problem, index, color, isDone, onReveal, o
         <button
           onClick={onToggle}
           title={isDone ? 'Mark as not done' : 'Mark as done'}
-          className="text-xl mt-0.5 transition-transform active:scale-110 shrink-0 touch-manipulation"
+          className="text-xl p-2 -mr-1 transition-transform active:scale-110 shrink-0 touch-manipulation rounded-xl hover:bg-gray-100"
         >
           {isDone ? '✅' : '⬜'}
         </button>
@@ -59,13 +59,13 @@ export default function ProblemCard({ problem, index, color, isDone, onReveal, o
       {revealed && (
         <div className={`mt-4 rounded-xl border p-3 sm:p-4 ${c.answer}`} style={{ animation: 'fadeSlideIn 0.3s ease' }}>
           <p className="text-sm font-bold text-gray-700 mb-3">
-            Answer: <span className="text-base sm:text-lg">{problem.answer}</span>
+            Answer: <span className="text-base sm:text-lg text-gray-900">{problem.answer}</span>
           </p>
-          <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Step-by-step</p>
+          <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">How to solve it</p>
           <ol className="space-y-1.5">
             {problem.steps.map((step, i) => (
               <li key={i} className="text-sm text-gray-700 flex gap-2">
-                <span className="font-bold text-gray-400 shrink-0">{i + 1}.</span>
+                <span className="font-bold text-gray-600 shrink-0">{i + 1}.</span>
                 <span className="font-mono text-xs sm:text-sm break-words min-w-0">{step}</span>
               </li>
             ))}
@@ -95,7 +95,7 @@ export default function ProblemCard({ problem, index, color, isDone, onReveal, o
               {reaction === 'got-it' ? (
                 <p className="text-xs text-green-600 font-semibold">👍 Awesome! Marked as done.</p>
               ) : (
-                <p className="text-xs text-amber-600 font-semibold">🤔 No worries — review the steps and try again later!</p>
+                <p className="text-xs text-amber-600 font-semibold">🤔 No worries! Review the steps and try again later.</p>
               )}
             </div>
           )}

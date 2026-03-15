@@ -37,14 +37,20 @@ export default function TopicView({ topic, isDone, markDone, toggleDone, topicPr
       )}
 
       {/* Header */}
-      <div className={`bg-gradient-to-br ${grad} text-white px-4 sm:px-6 pt-safe pt-6 pb-6`}>
-        <button
-          onClick={onBack}
-          className="flex items-center gap-1.5 text-white/80 hover:text-white text-sm mb-4 transition-colors group"
-        >
-          <span className="group-hover:-translate-x-1 transition-transform inline-block">←</span> Back
-        </button>
-        <div className="flex items-center gap-3 mb-5">
+      <div className={`bg-gradient-to-br ${grad} text-white px-4 sm:px-6 pb-6`}>
+        {/* Back button row — sticky feel with top padding for status bar */}
+        <div className="pt-5 pb-2">
+          <button
+            onClick={onBack}
+            className="inline-flex items-center gap-2 text-white/80 hover:text-white text-sm font-medium transition-colors group bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full"
+          >
+            <span className="group-hover:-translate-x-0.5 transition-transform inline-block">←</span>
+            Back to Topics
+          </button>
+        </div>
+
+        {/* Topic title */}
+        <div className="flex items-center gap-3 mt-3 mb-5">
           <span className="text-4xl sm:text-5xl drop-shadow">{topic.emoji}</span>
           <div>
             <h1 className="text-xl sm:text-2xl font-bold leading-tight">{topic.title}</h1>
@@ -62,11 +68,14 @@ export default function TopicView({ topic, isDone, markDone, toggleDone, topicPr
 
         {/* Formulas */}
         <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-gray-100">
-          <h2 className="font-bold text-gray-700 mb-3 text-xs uppercase tracking-widest">📌 Key Formulas</h2>
-          <div className="space-y-2.5">
+          <div className="flex items-center gap-2 mb-4">
+            <span className="text-lg">📌</span>
+            <h2 className="font-extrabold text-gray-800 text-sm uppercase tracking-wider">Key Formulas</h2>
+          </div>
+          <div className="space-y-3">
             {topic.formulas.map((f, i) => (
-              <div key={i} className="flex flex-col gap-1">
-                <span className="text-xs text-gray-500 font-medium">{f.name}</span>
+              <div key={i} className="border-l-4 border-indigo-300 pl-3 flex flex-col gap-1">
+                <span className="text-xs text-gray-500 font-semibold">{f.name}</span>
                 <code className="text-sm bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-gray-800 font-mono break-words">
                   {f.formula}
                 </code>
@@ -77,7 +86,10 @@ export default function TopicView({ topic, isDone, markDone, toggleDone, topicPr
 
         {/* Problems */}
         <div>
-          <h2 className="font-bold text-gray-700 mb-3 text-xs uppercase tracking-widest">🧠 Practice Problems</h2>
+          <div className="flex items-center gap-2 mb-4">
+            <span className="text-lg">🧠</span>
+            <h2 className="font-extrabold text-gray-800 text-sm uppercase tracking-wider">Practice Problems</h2>
+          </div>
           <div className="space-y-4">
             {topic.problems.map((problem, i) => (
               <ProblemCard

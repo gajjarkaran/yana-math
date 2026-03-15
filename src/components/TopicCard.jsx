@@ -21,7 +21,7 @@ export default function TopicCard({ topic, progress, onClick }) {
       className="w-full text-left bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden group"
     >
       {/* colored header */}
-      <div className={`bg-gradient-to-br ${grad} px-5 pt-5 pb-8 relative`}>
+      <div className={`bg-gradient-to-br ${grad} px-5 pt-5 pb-5 relative`}>
         <div className="text-4xl mb-1">{topic.emoji}</div>
         <h3 className="font-bold text-white text-lg leading-tight">{topic.title}</h3>
         <span className="text-xs text-white/70">{total} problems</span>
@@ -31,7 +31,7 @@ export default function TopicCard({ topic, progress, onClick }) {
       </div>
 
       {/* progress section */}
-      <div className="px-5 py-4 bg-white rounded-t-2xl relative">
+      <div className="px-5 py-4 bg-white relative">
         <ProgressBar completed={completed} total={total} color={topic.color} />
       </div>
     </button>
