@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import ProblemCard from './ProblemCard';
 import ProgressBar from './ProgressBar';
 import MilestoneModal from './MilestoneModal';
+import StarMeter from './StarMeter';
+import BossBattlePanel from './BossBattlePanel';
 
 const gradients = {
   rose:   'from-rose-400 to-pink-500',
@@ -13,21 +15,29 @@ const gradients = {
   teal:   'from-teal-400 to-cyan-500',
 };
 
-export default function TopicView({ topic, isDone, markDone, toggleDone, topicProgress, getShuffledProblems, onBack, resetKey, dark, toggleDark }) {
+function getBossProblems(problems) {
+  const indexes = [1, Math.floor(problems.length / 2), problems.length - 2];
+  const uniqueIndexes = [...new Set(indexes)].filter((index) => index >= 0 && index < problems.length);
+  return uniqueIndexes.map((index) => problems[index]);
+}
+
+export default function TopicView({ topic, isDone, markDone, toggleDone, topicProgress, getShuffledProblems, getProblemStarsFor, getTopicGameSummary, completeBossBattle, onBack, resetKey, dark, toggleDark }) {
   const [showMilestone, setShowMilestone] = useState(false);
   const problems = getShuffledProblems(topic);
+  const bossProblems = getBossProblems(problems);
   const { completed, total } = topicProgress(topic.problems);
+  const gameSummary = getTopicGameSummary(topic);
   const grad = gradients[topic.color] || 'from-indigo-400 to-purple-500';
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
   }, []);
 
-  const handleMarkGotIt = (problemId) => {
+  const handleMarkGotIt = (problemId, meta) => {
     if (!isDone(problemId) && completed + 1 === total && total > 0) {
       setShowMilestone(true);
     }
-    markDone(problemId);
+    return markDone(problemId, { ...meta, topicId: topic.id });
   };
 
   const handleMarkUndone = (problemId) => {
@@ -84,6 +94,9 @@ export default function TopicView({ topic, isDone, markDone, toggleDone, topicPr
             <div className="rounded-[1.4rem] bg-slate-950/15 dark:bg-slate-950/28 border border-white/15 dark:border-white/10 px-4 py-3 backdrop-blur-sm">
               <p className="text-[11px] uppercase tracking-[0.18em] text-white/70 font-black">Progress</p>
               <p className="text-2xl font-black">{completed}<span className="text-base text-white/70">/{total}</span></p>
+              <div className="mt-2">
+                <StarMeter count={Math.min(3, Math.round((gameSummary.stars / gameSummary.possibleStars) * 3))} size="sm" dimmed={true} />
+              </div>
             </div>
           </div>
           <div className="relative rounded-[1.5rem] bg-white/14 dark:bg-slate-950/24 border border-white/15 dark:border-white/10 backdrop-blur-sm px-4 py-4">
@@ -142,12 +155,23 @@ export default function TopicView({ topic, isDone, markDone, toggleDone, topicPr
                 index={i}
                 color={topic.color}
                 isDone={isDone(problem.id)}
-                onMarkGotIt={() => handleMarkGotIt(problem.id)}
+                bestStars={getProblemStarsFor(problem.id)}
+                onMarkGotIt={(meta) => handleMarkGotIt(problem.id, meta)}
                 onMarkUndone={() => handleMarkUndone(problem.id)}
               />
             ))}
           </div>
         </div>
+
+        <BossBattlePanel
+          topic={topic}
+          problems={bossProblems}
+          bossState={{
+            ...gameSummary.boss,
+            unlocked: completed === total && total > 0,
+          }}
+          onWin={(meta) => completeBossBattle(topic.id, meta)}
+        />
       </div>
     </div>
   );

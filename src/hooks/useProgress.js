@@ -1,9 +1,22 @@
 import { useState, useEffect, useCallback } from 'react';
 import { topics } from '../data/topics';
+import {
+  BOSS_XP,
+  PROBLEM_XP,
+  getBadges,
+  getDailyQuests,
+  getDefaultActivityRecord,
+  getLevelInfo,
+  getProblemStars,
+  getBossStars,
+  getTodayKey,
+  normalizeGameState,
+} from '../utils/gameProgress';
 
 const STORAGE_KEY   = 'yana_math_progress';
 const STREAK_KEY    = 'yana_math_streak';
 const SHUFFLE_KEY   = 'yana_math_shuffle';
+const GAME_KEY      = 'yana_math_game';
 
 function shuffle(arr) {
   const a = [...arr];
@@ -48,6 +61,10 @@ export function useProgress() {
   });
 
   const [resetKey, setResetKey] = useState(0);
+  const [game, setGame] = useState(() => {
+    try { return normalizeGameState(JSON.parse(localStorage.getItem(GAME_KEY))); }
+    catch { return normalizeGameState(null); }
+  });
 
   const [shuffleOrder, setShuffleOrder] = useState(() => {
     return loadShuffleOrder() || buildShuffleOrder();
@@ -57,13 +74,65 @@ export function useProgress() {
   useEffect(() => { localStorage.setItem(STORAGE_KEY, JSON.stringify(done)); }, [done]);
   useEffect(() => { localStorage.setItem(STREAK_KEY, String(streak)); }, [streak]);
   useEffect(() => { localStorage.setItem(SHUFFLE_KEY, JSON.stringify(shuffleOrder)); }, [shuffleOrder]);
+  useEffect(() => { localStorage.setItem(GAME_KEY, JSON.stringify(game)); }, [game]);
 
-  const markDone = (problemId) => {
-    setDone((prev) => {
-      if (prev[problemId]) return prev;
-      setStreak((s) => s + 1);
-      return { ...prev, [problemId]: true };
+  const markDone = (problemId, meta = {}) => {
+    const topic = topics.find((entry) => entry.id === meta.topicId);
+    const topicProblems = topic?.problems ?? [];
+    const previousStars = game.stars[problemId] || 0;
+    const earnedStars = getProblemStars({
+      attempts: meta.attempts ?? 1,
+      hintsUsed: meta.hintsUsed ?? 0,
     });
+    const bestStars = Math.max(previousStars, earnedStars);
+    const xpDelta = Math.max(0, (PROBLEM_XP[bestStars] || 0) - (PROBLEM_XP[previousStars] || 0));
+    const nextDone = done[problemId] ? done : { ...done, [problemId]: true };
+    const topicCompletedNow = topicProblems.length > 0 && topicProblems.every((problem) => nextDone[problem.id]);
+    const todayKey = getTodayKey();
+    const todayActivity = {
+      ...getDefaultActivityRecord(),
+      ...(game.activity[todayKey] || {}),
+    };
+    const nextGame = {
+      ...game,
+      xp: game.xp + xpDelta,
+      stars: {
+        ...game.stars,
+        [problemId]: bestStars,
+      },
+      activity: {
+        ...game.activity,
+        [todayKey]: {
+          ...todayActivity,
+          solvedIds: todayActivity.solvedIds.includes(problemId) ? todayActivity.solvedIds : [...todayActivity.solvedIds, problemId],
+          perfectIds: bestStars === 3 && !todayActivity.perfectIds.includes(problemId)
+            ? [...todayActivity.perfectIds, problemId]
+            : todayActivity.perfectIds,
+          topicMasteredIds: topicCompletedNow && !todayActivity.topicMasteredIds.includes(meta.topicId)
+            ? [...todayActivity.topicMasteredIds, meta.topicId]
+            : todayActivity.topicMasteredIds,
+          xpEarned: todayActivity.xpEarned + xpDelta,
+        },
+      },
+    };
+
+    setDone(nextDone);
+    if (!done[problemId]) {
+      setStreak((value) => value + 1);
+    }
+    setGame(nextGame);
+
+    const currentBadges = getBadges(done, game, streak).filter((badge) => badge.unlocked).map((badge) => badge.id);
+    const nextBadges = getBadges(nextDone, nextGame, done[problemId] ? streak : streak + 1).filter((badge) => badge.unlocked).map((badge) => badge.id);
+
+    return {
+      earnedStars,
+      bestStars,
+      xpDelta,
+      topicCompletedNow,
+      unlockedBadges: nextBadges.filter((id) => !currentBadges.includes(id)),
+      dailyQuestWins: getDailyQuests(nextGame).filter((quest) => quest.completed).length,
+    };
   };
 
   const toggleDone = (problemId) => {
@@ -76,6 +145,7 @@ export function useProgress() {
   };
 
   const isDone = (problemId) => !!done[problemId];
+  const getProblemStarsFor = (problemId) => game.stars[problemId] || 0;
 
   const topicProgress = (problems) => {
     const completed = problems.filter((p) => done[p.id]).length;
@@ -94,11 +164,87 @@ export function useProgress() {
     setDone({});
     setStreak(0);
     setShuffleOrder(newOrder);
+    setGame(normalizeGameState(null));
     setResetKey((k) => k + 1);
     localStorage.removeItem(STORAGE_KEY);
     localStorage.removeItem(STREAK_KEY);
+    localStorage.removeItem(GAME_KEY);
     localStorage.setItem(SHUFFLE_KEY, JSON.stringify(newOrder));
   };
 
-  return { markDone, toggleDone, isDone, topicProgress, getShuffledProblems, resetAll, streak, resetKey };
+  const completeBossBattle = (topicId, { mistakes = 0 } = {}) => {
+    const previousStars = game.bossWins[topicId]?.stars || 0;
+    const earnedStars = getBossStars(mistakes);
+    const bestStars = Math.max(previousStars, earnedStars);
+    const xpDelta = Math.max(0, (BOSS_XP[bestStars] || 0) - (BOSS_XP[previousStars] || 0));
+    const todayKey = getTodayKey();
+    const todayActivity = {
+      ...getDefaultActivityRecord(),
+      ...(game.activity[todayKey] || {}),
+    };
+    const nextGame = {
+      ...game,
+      xp: game.xp + xpDelta,
+      bossWins: {
+        ...game.bossWins,
+        [topicId]: {
+          completed: true,
+          stars: bestStars,
+        },
+      },
+      activity: {
+        ...game.activity,
+        [todayKey]: {
+          ...todayActivity,
+          bossTopicIds: todayActivity.bossTopicIds.includes(topicId) ? todayActivity.bossTopicIds : [...todayActivity.bossTopicIds, topicId],
+          xpEarned: todayActivity.xpEarned + xpDelta,
+        },
+      },
+    };
+
+    setGame(nextGame);
+    const currentBadges = getBadges(done, game, streak).filter((badge) => badge.unlocked).map((badge) => badge.id);
+    const nextBadges = getBadges(done, nextGame, streak).filter((badge) => badge.unlocked).map((badge) => badge.id);
+
+    return {
+      earnedStars,
+      bestStars,
+      xpDelta,
+      unlockedBadges: nextBadges.filter((id) => !currentBadges.includes(id)),
+    };
+  };
+
+  const totalStars = Object.values(game.stars).reduce((sum, value) => sum + value, 0);
+  const totalPossibleStars = topics.reduce((sum, topic) => sum + topic.problems.length * 3, 0);
+  const bossWins = Object.values(game.bossWins).filter((entry) => entry.completed).length;
+  const levelInfo = getLevelInfo(game.xp);
+  const badges = getBadges(done, game, streak);
+  const dailyQuests = getDailyQuests(game);
+
+  const getTopicGameSummary = (topic) => ({
+    stars: topic.problems.reduce((sum, problem) => sum + (game.stars[problem.id] || 0), 0),
+    possibleStars: topic.problems.length * 3,
+    boss: game.bossWins[topic.id] || { completed: false, stars: 0 },
+  });
+
+  return {
+    markDone,
+    toggleDone,
+    isDone,
+    topicProgress,
+    getShuffledProblems,
+    resetAll,
+    streak,
+    resetKey,
+    xp: game.xp,
+    levelInfo,
+    totalStars,
+    totalPossibleStars,
+    badges,
+    dailyQuests,
+    bossWins,
+    completeBossBattle,
+    getProblemStarsFor,
+    getTopicGameSummary,
+  };
 }

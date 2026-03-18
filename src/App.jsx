@@ -4,6 +4,8 @@ import { useProgress } from './hooks/useProgress';
 import { useDarkMode } from './hooks/useDarkMode';
 import TopicCard from './components/TopicCard';
 import TopicView from './components/TopicView';
+import DailyQuestPanel from './components/DailyQuestPanel';
+import BadgeShelf from './components/BadgeShelf';
 
 function DarkToggle({ dark, toggle }) {
   return (
@@ -19,16 +21,31 @@ function DarkToggle({ dark, toggle }) {
 
 export default function App() {
   const [activeTopic, setActiveTopic] = useState(null);
-  const { markDone, toggleDone, isDone, topicProgress, getShuffledProblems, resetAll, streak, resetKey } = useProgress();
+  const {
+    markDone,
+    toggleDone,
+    isDone,
+    topicProgress,
+    getShuffledProblems,
+    resetAll,
+    streak,
+    resetKey,
+    xp,
+    levelInfo,
+    totalStars,
+    totalPossibleStars,
+    badges,
+    dailyQuests,
+    bossWins,
+    completeBossBattle,
+    getProblemStarsFor,
+    getTopicGameSummary,
+  } = useProgress();
   const { dark, toggle: toggleDark } = useDarkMode();
 
   const totalProblems = topics.reduce((sum, t) => sum + t.problems.length, 0);
   const totalDone = topics.reduce((sum, t) => sum + topicProgress(t.problems).completed, 0);
   const overallPct = Math.round((totalDone / totalProblems) * 100);
-  const completedTopics = topics.filter(t => {
-    const { completed, total } = topicProgress(t.problems);
-    return completed === total && total > 0;
-  }).length;
 
   if (activeTopic) {
     return (
@@ -39,6 +56,9 @@ export default function App() {
         toggleDone={toggleDone}
         topicProgress={topicProgress}
         getShuffledProblems={getShuffledProblems}
+        getProblemStarsFor={getProblemStarsFor}
+        getTopicGameSummary={getTopicGameSummary}
+        completeBossBattle={completeBossBattle}
         onBack={() => { setActiveTopic(null); window.scrollTo({ top: 0, behavior: 'instant' }); }}
         resetKey={resetKey}
         dark={dark}
@@ -80,16 +100,20 @@ export default function App() {
             {/* Stats row */}
             <div className="flex justify-center gap-3 mb-8 flex-wrap">
               <div className="bg-white/18 dark:bg-slate-950/28 backdrop-blur-md rounded-[1.6rem] px-5 py-4 text-center min-w-[96px] border border-white/15 dark:border-white/10 shadow-lg shadow-violet-900/15 dark:shadow-slate-950/30">
-                <p className="text-3xl font-black leading-none">{totalDone}</p>
-                <p className="text-xs text-white/80 mt-1 uppercase tracking-wide">Solved</p>
+                <p className="text-3xl font-black leading-none">{levelInfo.level}</p>
+                <p className="text-xs text-white/80 mt-1 uppercase tracking-wide">Level</p>
+              </div>
+              <div className="bg-white/18 dark:bg-slate-950/28 backdrop-blur-md rounded-[1.6rem] px-5 py-4 text-center min-w-[96px] border border-white/15 dark:border-white/10 shadow-lg shadow-violet-900/15 dark:shadow-slate-950/30">
+                <p className="text-3xl font-black leading-none">{xp}</p>
+                <p className="text-xs text-white/80 mt-1 uppercase tracking-wide">XP</p>
               </div>
               <div className="bg-white/18 dark:bg-slate-950/28 backdrop-blur-md rounded-[1.6rem] px-5 py-4 text-center min-w-[96px] border border-white/15 dark:border-white/10 shadow-lg shadow-violet-900/15 dark:shadow-slate-950/30">
                 <p className="text-3xl font-black leading-none">{streak}</p>
                 <p className="text-xs text-white/80 mt-1 uppercase tracking-wide">🔥 Streak</p>
               </div>
               <div className="bg-white/18 dark:bg-slate-950/28 backdrop-blur-md rounded-[1.6rem] px-5 py-4 text-center min-w-[96px] border border-white/15 dark:border-white/10 shadow-lg shadow-violet-900/15 dark:shadow-slate-950/30">
-                <p className="text-3xl font-black leading-none">{completedTopics}<span className="text-base text-white/70">/{topics.length}</span></p>
-                <p className="text-xs text-white/80 mt-1 uppercase tracking-wide">Topics</p>
+                <p className="text-3xl font-black leading-none">{bossWins}<span className="text-base text-white/70">/{topics.length}</span></p>
+                <p className="text-xs text-white/80 mt-1 uppercase tracking-wide">Bosses</p>
               </div>
             </div>
 
@@ -107,7 +131,19 @@ export default function App() {
               </div>
               <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-xs text-white/85">
                 <p>{totalDone} of {totalProblems} challenge cards solved</p>
-                <span className="rounded-full bg-slate-950/15 dark:bg-white/10 px-3 py-1 border border-white/15 dark:border-white/10">Keep the streak glowing</span>
+                <span className="rounded-full bg-slate-950/15 dark:bg-white/10 px-3 py-1 border border-white/15 dark:border-white/10">{totalStars}/{totalPossibleStars} stars</span>
+              </div>
+              <div className="mt-4">
+                <div className="flex items-center justify-between text-xs font-black uppercase tracking-wide text-white/80 mb-2">
+                  <span>Level {levelInfo.level}</span>
+                  <span>{levelInfo.xpIntoLevel}/{levelInfo.nextLevelXp} XP to next</span>
+                </div>
+                <div className="h-3 rounded-full bg-slate-950/20 border border-white/10 overflow-hidden">
+                  <div
+                    className="h-full rounded-full bg-[linear-gradient(90deg,#fde68a_0%,#f9a8d4_45%,#7dd3fc_100%)] transition-all duration-700"
+                    style={{ width: `${levelInfo.progressPct}%` }}
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -116,6 +152,10 @@ export default function App() {
 
       {/* Topics section */}
       <div className="max-w-5xl mx-auto px-4 pt-8 pb-16 sm:pb-12 relative">
+        <div className="space-y-5 mb-6">
+          <DailyQuestPanel quests={dailyQuests} />
+          <BadgeShelf badges={badges} />
+        </div>
         <div className="flex items-center justify-between mb-5 gap-3 flex-wrap">
           <div>
             <h2 className="font-black text-slate-900 dark:text-slate-50 text-2xl tracking-tight">Choose Your Math World</h2>
@@ -134,6 +174,7 @@ export default function App() {
               key={topic.id}
               topic={topic}
               progress={topicProgress(topic.problems)}
+              gameSummary={getTopicGameSummary(topic)}
               onClick={() => setActiveTopic(topic)}
             />
           ))}

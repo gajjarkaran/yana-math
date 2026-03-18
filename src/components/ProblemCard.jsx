@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { isAnswerCorrect } from '../utils/answerCheck';
+import StarMeter from './StarMeter';
 
 const palette = {
   rose:   { btn: 'bg-rose-500 hover:bg-rose-600 shadow-rose-300/50',     answer: 'bg-rose-50/95 dark:bg-rose-950 border-rose-200 dark:border-rose-800',     badge: 'bg-rose-100 dark:bg-rose-900 text-rose-700 dark:text-rose-300', shell: 'from-rose-100/80 via-white to-pink-50/90 dark:from-rose-950/40 dark:via-slate-900 dark:to-pink-950/30', accent: 'text-rose-500 dark:text-rose-300', ring: 'border-rose-200/90 dark:border-rose-800/80' },
@@ -37,10 +38,12 @@ function getAnswerFormatHint(problem) {
   return 'Use the final answer format the question is asking for.';
 }
 
-export default function ProblemCard({ problem, index, color, isDone, onMarkGotIt, onMarkUndone }) {
+export default function ProblemCard({ problem, index, color, isDone, bestStars, onMarkGotIt, onMarkUndone }) {
   const [answerInput, setAnswerInput] = useState('');
   const [feedback, setFeedback] = useState(null);
   const [hintCount, setHintCount] = useState(0);
+  const [attemptCount, setAttemptCount] = useState(0);
+  const [reward, setReward] = useState(null);
   const c = palette[color] || palette.teal;
   const hints = problem.steps.slice(0, -1);
   const visibleHints = hints.slice(0, hintCount);
@@ -56,9 +59,15 @@ export default function ProblemCard({ problem, index, color, isDone, onMarkGotIt
       return;
     }
 
+    const nextAttemptCount = attemptCount + 1;
+    setAttemptCount(nextAttemptCount);
+
     if (isAnswerCorrect(trimmedAnswer, problem.answer)) {
       setFeedback('correct');
-      onMarkGotIt();
+      setReward(onMarkGotIt({
+        attempts: nextAttemptCount,
+        hintsUsed: hintCount,
+      }));
       return;
     }
 
@@ -75,6 +84,8 @@ export default function ProblemCard({ problem, index, color, isDone, onMarkGotIt
     setAnswerInput('');
     setFeedback(null);
     setHintCount(0);
+    setAttemptCount(0);
+    setReward(null);
     onMarkUndone();
   };
 
@@ -92,6 +103,8 @@ export default function ProblemCard({ problem, index, color, isDone, onMarkGotIt
             <p className="text-slate-800 dark:text-slate-100 font-semibold text-sm sm:text-base leading-relaxed break-words">{problem.question}</p>
           </div>
         </div>
+        <div className="flex items-center gap-2 shrink-0">
+          <StarMeter count={bestStars} size="sm" />
         {isDone ? (
           <button
             onClick={handleMarkUndone}
@@ -108,6 +121,7 @@ export default function ProblemCard({ problem, index, color, isDone, onMarkGotIt
             🔒
           </span>
         )}
+        </div>
       </div>
 
       {!solutionUnlocked && (
@@ -185,7 +199,10 @@ export default function ProblemCard({ problem, index, color, isDone, onMarkGotIt
         <div className={`mt-5 rounded-[1.6rem] border p-4 sm:p-5 shadow-sm ${c.answer}`} style={{ animation: 'fadeSlideIn 0.3s ease' }}>
           <div className="flex items-center justify-between gap-3 mb-3">
             <p className="text-xs font-black text-green-600 dark:text-green-400 uppercase tracking-[0.18em]">Solved</p>
-            <span className="rounded-full bg-green-500 text-white px-3 py-1 text-[11px] font-black uppercase tracking-wide shadow-sm">Unlocked</span>
+            <div className="flex items-center gap-2 flex-wrap justify-end">
+              <StarMeter count={reward?.bestStars || bestStars} size="sm" />
+              <span className="rounded-full bg-green-500 text-white px-3 py-1 text-[11px] font-black uppercase tracking-wide shadow-sm">Unlocked</span>
+            </div>
           </div>
           <p className="text-sm font-bold text-slate-700 dark:text-slate-300 mb-3">
             Answer: <span className="text-base sm:text-lg text-slate-900 dark:text-white">{problem.answer}</span>
@@ -201,7 +218,19 @@ export default function ProblemCard({ problem, index, color, isDone, onMarkGotIt
           </ol>
           <div className="mt-4 pt-3 border-t border-black/5 dark:border-white/10 flex items-center justify-between gap-2 flex-wrap">
             <p className="text-xs text-green-600 dark:text-green-400 font-bold">Nice work. This one is marked as done.</p>
-            <span className="text-xs font-black uppercase tracking-wide text-slate-500 dark:text-slate-400">Math power-up earned ✨</span>
+            <div className="flex items-center gap-2 flex-wrap justify-end">
+              {reward?.xpDelta > 0 && (
+                <span className="rounded-full bg-amber-300 text-slate-950 px-3 py-1 text-[11px] font-black uppercase tracking-wide">
+                  +{reward.xpDelta} XP
+                </span>
+              )}
+              {(reward?.unlockedBadges?.length ?? 0) > 0 && (
+                <span className="rounded-full bg-fuchsia-500 text-white px-3 py-1 text-[11px] font-black uppercase tracking-wide">
+                  New Badge
+                </span>
+              )}
+              <span className="text-xs font-black uppercase tracking-wide text-slate-500 dark:text-slate-400">Math power-up earned ✨</span>
+            </div>
           </div>
         </div>
       )}

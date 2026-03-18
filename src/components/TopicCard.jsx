@@ -1,4 +1,5 @@
 import ProgressBar from './ProgressBar';
+import StarMeter from './StarMeter';
 
 const gradients = {
   rose:   'from-rose-400 to-pink-500',
@@ -10,11 +11,12 @@ const gradients = {
   teal:   'from-teal-400 to-cyan-500',
 };
 
-export default function TopicCard({ topic, progress, onClick }) {
+export default function TopicCard({ topic, progress, gameSummary, onClick }) {
   const { completed, total } = progress;
   const isComplete = completed === total && total > 0;
   const grad = gradients[topic.color] || 'from-indigo-400 to-purple-500';
   const summary = topic.description.split('. ')[0];
+  const bossLabel = gameSummary.boss.completed ? 'Boss beaten' : isComplete ? 'Boss ready' : 'Boss locked';
 
   return (
     <button
@@ -50,6 +52,21 @@ export default function TopicCard({ topic, progress, onClick }) {
             <span>{isComplete ? 'All clear' : 'Keep going'}</span>
           </div>
           <ProgressBar completed={completed} total={total} color={topic.color} />
+        </div>
+        <div className="mt-4 flex items-center justify-between gap-3 flex-wrap">
+          <div>
+            <p className="text-[11px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.18em] mb-1">Star Power</p>
+            <div className="flex items-center gap-2">
+              <StarMeter count={Math.min(3, Math.round((gameSummary.stars / gameSummary.possibleStars) * 3))} size="sm" />
+              <span className="text-xs font-bold text-slate-500 dark:text-slate-300">{gameSummary.stars}/{gameSummary.possibleStars}</span>
+            </div>
+          </div>
+          <div className="text-right">
+            <p className="text-[11px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.18em] mb-1">Boss</p>
+            <span className={`text-xs font-black uppercase tracking-wide ${gameSummary.boss.completed ? 'text-green-500 dark:text-green-300' : 'text-slate-500 dark:text-slate-300'}`}>
+              {bossLabel}
+            </span>
+          </div>
         </div>
         <div className="mt-4 flex items-center justify-between">
           <span className="text-xs font-bold text-slate-500 dark:text-slate-300 uppercase tracking-wide">
