@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { isAnswerCorrect } from '../utils/answerCheck';
+import { getAnswerFormatHint } from '../utils/answerFormatHint';
 import StarMeter from './StarMeter';
 
 const palette = {
@@ -12,32 +13,6 @@ const palette = {
   teal:   { btn: 'bg-teal-500 hover:bg-teal-600 shadow-teal-300/50',     answer: 'bg-teal-50/95 dark:bg-teal-950 border-teal-200 dark:border-teal-800',     badge: 'bg-teal-100 dark:bg-teal-900 text-teal-700 dark:text-teal-300', shell: 'from-teal-100/80 via-white to-cyan-50/90 dark:from-teal-950/40 dark:via-slate-900 dark:to-cyan-950/30', accent: 'text-teal-500 dark:text-teal-300', ring: 'border-teal-200/90 dark:border-teal-800/80' },
 };
 
-function getAnswerFormatHint(problem) {
-  const answer = problem.answer;
-
-  if (answer.includes(',') && !answer.includes('Area =')) {
-    return 'Keep the items in order and separate them with commas.';
-  }
-
-  if (answer.includes(';') || /area\s*=|perimeter\s*=|d\s*=|x\s*[<>]=?/.test(answer.toLowerCase())) {
-    return 'Include every part of the final answer, not just one piece of it.';
-  }
-
-  if (/[$]|cm|ft|m²|cm²|ft²|cm³|m³|units|liters|miles|inches|cups|girls|lawns|servings|questions|hamburger|ticket|marbles|feet|°c/i.test(answer)) {
-    return 'Include units if the question asks for them.';
-  }
-
-  if (answer.includes(':')) {
-    return 'Use ratio form with a colon and simplify if needed.';
-  }
-
-  if (answer.includes('/')) {
-    return 'Fractions can be typed with a slash, like 3/4.';
-  }
-
-  return 'Use the final answer format the question is asking for.';
-}
-
 export default function ProblemCard({ problem, index, color, isDone, bestStars, onMarkGotIt, onMarkUndone }) {
   const [answerInput, setAnswerInput] = useState('');
   const [feedback, setFeedback] = useState(null);
@@ -49,7 +24,7 @@ export default function ProblemCard({ problem, index, color, isDone, bestStars, 
   const visibleHints = hints.slice(0, hintCount);
   const solutionUnlocked = isDone || feedback === 'correct';
   const hasMoreHints = hintCount < hints.length;
-  const answerFormatHint = getAnswerFormatHint(problem);
+  const answerFormatHint = getAnswerFormatHint(problem.answer);
 
   const handleSubmit = (event) => {
     event.preventDefault();

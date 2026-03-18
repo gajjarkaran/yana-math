@@ -17,8 +17,6 @@ export default function MilestoneModal({ topic, onClose }) {
   useEffect(() => {
     confetti({ particleCount: 80, angle: 60, spread: 70, origin: { x: 0, y: 0.6 } });
     confetti({ particleCount: 80, angle: 120, spread: 70, origin: { x: 1, y: 0.6 } });
-    const t = setTimeout(onClose, 5000);
-    return () => clearTimeout(t);
   }, [onClose]);
 
   return (
@@ -40,6 +38,9 @@ export default function MilestoneModal({ topic, onClose }) {
         <p className="text-slate-700 dark:text-gray-300 mt-3 text-sm sm:text-base font-bold">{msg.line1}</p>
         <p className="text-slate-500 dark:text-gray-400 mt-1 text-xs sm:text-sm">Topic mastered. More challenge cards are waiting.</p>
         <p className="text-slate-500 dark:text-gray-500 mt-3 text-xs sm:text-sm">{msg.line2}</p>
+        <p className="text-slate-400 dark:text-gray-500 mt-4 text-[11px] font-bold uppercase tracking-[0.18em]">
+          Tap outside or press the button when you&apos;re ready
+        </p>
         <button
           onClick={onClose}
           className="mt-6 px-8 py-3 bg-gradient-to-r from-fuchsia-500 via-violet-500 to-sky-500 text-white rounded-full text-sm font-black uppercase tracking-wide active:opacity-80 transition-opacity shadow-lg touch-manipulation w-full sm:w-auto"

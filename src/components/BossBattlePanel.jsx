@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { isAnswerCorrect } from '../utils/answerCheck';
+import { getAnswerFormatHint } from '../utils/answerFormatHint';
 import StarMeter from './StarMeter';
 
 export default function BossBattlePanel({ topic, problems, bossState, onWin }) {
@@ -13,6 +14,7 @@ export default function BossBattlePanel({ topic, problems, bossState, onWin }) {
   });
 
   const currentProblem = problems[battleState.round];
+  const answerFormatHint = currentProblem ? getAnswerFormatHint(currentProblem.answer) : '';
 
   const startBattle = () => {
     setBattleState({
@@ -147,6 +149,15 @@ export default function BossBattlePanel({ topic, problems, bossState, onWin }) {
                 autoComplete="off"
                 className="w-full rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-3 text-sm text-white placeholder:text-white/35 focus:outline-none focus:ring-2 focus:ring-amber-300"
               />
+              <div className="rounded-2xl border border-white/10 bg-slate-950/25 px-4 py-3">
+                <p className="text-[11px] font-black uppercase tracking-[0.18em] text-white/60">Boss Tip</p>
+                <p className="mt-2 text-sm text-white/80">
+                  No hints in boss battles, so make sure your final answer uses the expected format.
+                </p>
+                <p className="mt-1 text-xs text-white/65">
+                  {answerFormatHint}
+                </p>
+              </div>
               <div className="flex gap-2 flex-wrap">
                 <button
                   type="submit"

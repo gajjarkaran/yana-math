@@ -6,6 +6,7 @@ import TopicCard from './components/TopicCard';
 import TopicView from './components/TopicView';
 import DailyQuestPanel from './components/DailyQuestPanel';
 import BadgeShelf from './components/BadgeShelf';
+import ResetConfirmModal from './components/ResetConfirmModal';
 
 function DarkToggle({ dark, toggle }) {
   return (
@@ -21,6 +22,7 @@ function DarkToggle({ dark, toggle }) {
 
 export default function App() {
   const [activeTopic, setActiveTopic] = useState(null);
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
   const {
     markDone,
     toggleDone,
@@ -69,6 +71,15 @@ export default function App() {
 
   return (
     <div className="min-h-screen text-slate-900 dark:text-slate-100 transition-colors duration-300 relative overflow-hidden">
+      {showResetConfirm && (
+        <ResetConfirmModal
+          onCancel={() => setShowResetConfirm(false)}
+          onConfirm={() => {
+            resetAll();
+            setShowResetConfirm(false);
+          }}
+        />
+      )}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-10 left-[-4rem] h-40 w-40 rounded-full bg-yellow-200/40 blur-3xl dark:bg-yellow-400/10" />
         <div className="absolute top-24 right-[-3rem] h-44 w-44 rounded-full bg-sky-200/40 blur-3xl dark:bg-sky-400/10" />
@@ -162,7 +173,7 @@ export default function App() {
             <p className="text-sm text-slate-600 dark:text-slate-300 mt-1">Each topic has its own challenge cards, hints, and progress meter.</p>
           </div>
           <button
-            onClick={() => { if (window.confirm('Reset all progress? This cannot be undone.')) resetAll(); }}
+            onClick={() => setShowResetConfirm(true)}
             className="text-xs font-bold text-rose-500 hover:text-rose-600 border-2 border-rose-200 dark:border-rose-900/70 bg-white/80 dark:bg-slate-900/60 hover:border-rose-400 px-4 py-2 rounded-full transition-colors touch-manipulation shadow-sm"
           >
             Reset progress
