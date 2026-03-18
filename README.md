@@ -1,6 +1,6 @@
 # Yana's Math Guide 🧠
 
-A personal math study guide for **Yana Mistry (Grade 6)**. Covers all core US Common Core Grade 6 math topics with formulas, practice problems, step-by-step solutions, and progress tracking.
+A personal math study guide for **Yana (Grade 6)**. Covers all core US Common Core Grade 6 math topics with formulas, practice problems, step-by-step solutions, and progress tracking.
 
 ## What this app does
 
