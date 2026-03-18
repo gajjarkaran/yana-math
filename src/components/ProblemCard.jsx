@@ -10,19 +10,18 @@ const palette = {
   teal:   { btn: 'bg-teal-500 hover:bg-teal-600',     answer: 'bg-teal-50 dark:bg-teal-950 border-teal-200 dark:border-teal-800',     badge: 'bg-teal-100 dark:bg-teal-900 text-teal-700 dark:text-teal-300' },
 };
 
-export default function ProblemCard({ problem, index, color, isDone, onReveal, onToggle }) {
+export default function ProblemCard({ problem, index, color, isDone, onMarkGotIt, onToggle }) {
   const [revealed, setRevealed] = useState(false);
   const [reaction, setReaction] = useState(null);
   const c = palette[color] || palette.teal;
 
   const handleReveal = () => {
     setRevealed(true);
-    onReveal();
   };
 
   const handleReaction = (r) => {
     setReaction(r);
-    if (r === 'got-it') onReveal();
+    if (r === 'got-it') onMarkGotIt();
   };
 
   return (

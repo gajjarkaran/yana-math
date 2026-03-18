@@ -14,10 +14,16 @@ function shuffle(arr) {
   return a;
 }
 
-function buildShuffleOrder() {
+function buildShuffleOrder(existingOrder = {}) {
   const order = {};
   topics.forEach((t) => {
-    order[t.id] = shuffle(t.problems.map((p) => p.id));
+    const currentIds = t.problems.map((p) => p.id);
+    const currentIdSet = new Set(currentIds);
+    const storedIds = Array.isArray(existingOrder[t.id]) ? existingOrder[t.id] : [];
+    const preservedIds = storedIds.filter((id) => currentIdSet.has(id));
+    const missingIds = currentIds.filter((id) => !preservedIds.includes(id));
+
+    order[t.id] = [...preservedIds, ...shuffle(missingIds)];
   });
   return order;
 }
@@ -25,8 +31,7 @@ function buildShuffleOrder() {
 function loadShuffleOrder() {
   try {
     const stored = JSON.parse(localStorage.getItem(SHUFFLE_KEY));
-    // validate: must have all topic ids
-    if (stored && topics.every((t) => Array.isArray(stored[t.id]))) return stored;
+    if (stored && typeof stored === 'object') return buildShuffleOrder(stored);
   } catch { /* fall through */ }
   return null;
 }

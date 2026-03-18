@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import confetti from 'canvas-confetti';
 
 const messages = [
@@ -12,7 +12,7 @@ const messages = [
 ];
 
 export default function MilestoneModal({ topic, onClose }) {
-  const msg = useRef(messages[Math.floor(Math.random() * messages.length)]).current;
+  const msg = messages[topic.length % messages.length];
 
   useEffect(() => {
     confetti({ particleCount: 80, angle: 60, spread: 70, origin: { x: 0, y: 0.6 } });

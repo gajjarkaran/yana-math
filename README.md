@@ -16,7 +16,7 @@ A personal math study guide for **Yana Mistry (Grade 6)**. Covers all core US Co
 ## Running locally
 
 ```bash
-cd yana-math
+cd yanaQuiz
 npm install
 npm run dev
 ```

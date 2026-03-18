@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import ProblemCard from './ProblemCard';
 import ProgressBar from './ProgressBar';
 import MilestoneModal from './MilestoneModal';
@@ -17,19 +17,29 @@ export default function TopicView({ topic, isDone, markDone, toggleDone, topicPr
   const [showMilestone, setShowMilestone] = useState(false);
   const problems = getShuffledProblems(topic);
   const { completed, total } = topicProgress(topic.problems);
-  const prevCompleted = useRef(completed);
   const grad = gradients[topic.color] || 'from-indigo-400 to-purple-500';
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
   }, []);
 
-  useEffect(() => {
-    if (prevCompleted.current !== total && completed === total && total > 0) {
+  const handleMarkGotIt = (problemId) => {
+    if (!isDone(problemId) && completed + 1 === total && total > 0) {
       setShowMilestone(true);
     }
-    prevCompleted.current = completed;
-  }, [completed, total]);
+    markDone(problemId);
+  };
+
+  const handleToggleDone = (problemId) => {
+    const currentlyDone = isDone(problemId);
+    if (!currentlyDone && completed + 1 === total && total > 0) {
+      setShowMilestone(true);
+    }
+    if (currentlyDone && completed === total) {
+      setShowMilestone(false);
+    }
+    toggleDone(problemId);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-slate-800 transition-colors duration-300" style={{ animation: 'slideInRight 0.3s ease' }}>
@@ -106,8 +116,8 @@ export default function TopicView({ topic, isDone, markDone, toggleDone, topicPr
                 index={i}
                 color={topic.color}
                 isDone={isDone(problem.id)}
-                onReveal={() => markDone(problem.id)}
-                onToggle={() => toggleDone(problem.id)}
+                onMarkGotIt={() => handleMarkGotIt(problem.id)}
+                onToggle={() => handleToggleDone(problem.id)}
               />
             ))}
           </div>
