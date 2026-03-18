@@ -12,7 +12,7 @@ export default function ProgressBar({ completed, total, color = 'indigo', onDark
     indigo: 'from-white to-white',
   }[color] || 'from-indigo-400 to-purple-500';
 
-  const trackColor = onDark ? 'bg-white/30' : ({
+  const trackColor = onDark ? 'bg-white/20 dark:bg-slate-950/35' : ({
     rose:   'bg-rose-100 dark:bg-rose-900/40',
     amber:  'bg-amber-100 dark:bg-amber-900/40',
     green:  'bg-green-100 dark:bg-green-900/40',
@@ -27,7 +27,7 @@ export default function ProgressBar({ completed, total, color = 'indigo', onDark
 
   return (
     <div className="w-full">
-      <div className="flex justify-between items-center mb-1.5">
+      <div className="flex justify-between items-center mb-2">
         <span className={`text-xs font-semibold ${labelColor}`}>
           {completed}/{total} done
         </span>
@@ -35,9 +35,9 @@ export default function ProgressBar({ completed, total, color = 'indigo', onDark
           {pct}%
         </span>
       </div>
-      <div className={`w-full h-2.5 rounded-full ${trackColor} overflow-hidden`}>
+      <div className={`w-full h-3 rounded-full ${trackColor} overflow-hidden border ${onDark ? 'border-white/10 dark:border-white/8' : 'border-white/80 dark:border-slate-700'}`}>
         <div
-          className={`h-2.5 rounded-full bg-gradient-to-r ${fillColor} transition-all duration-700 ease-out`}
+          className={`h-3 rounded-full bg-gradient-to-r ${fillColor} transition-all duration-700 ease-out shadow-sm`}
           style={{ width: `${pct}%` }}
         />
       </div>

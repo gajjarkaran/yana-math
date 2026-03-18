@@ -2,6 +2,15 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+:root {
+  font-family: "Avenir Next Rounded", "Trebuchet MS", "Gill Sans", "Segoe UI", sans-serif;
+  color: #172033;
+  background:
+    radial-gradient(circle at top left, rgba(255, 215, 128, 0.45), transparent 24%),
+    radial-gradient(circle at top right, rgba(106, 176, 255, 0.28), transparent 26%),
+    linear-gradient(180deg, #fff9ef 0%, #f7fbff 48%, #fff4fb 100%);
+}
+
 @keyframes popIn {
   from { opacity: 0; transform: scale(0.7); }
   to   { opacity: 1; transform: scale(1); }
@@ -17,6 +26,16 @@
   to   { opacity: 1; transform: translateX(0); }
 }
 
+@keyframes floatBob {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes sparklePulse {
+  0%, 100% { transform: scale(1); opacity: 0.55; }
+  50% { transform: scale(1.15); opacity: 1; }
+}
+
 /* safe area for notched phones */
 .pt-safe {
   padding-top: env(safe-area-inset-top);
@@ -27,7 +46,28 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(255, 215, 128, 0.35), transparent 22%),
+    radial-gradient(circle at 80% 12%, rgba(101, 163, 255, 0.22), transparent 20%),
+    linear-gradient(180deg, #fffaf0 0%, #f8fbff 45%, #fff5fc 100%);
+}
+
+.dark body {
+  background:
+    radial-gradient(circle at top left, rgba(56, 189, 248, 0.12), transparent 20%),
+    radial-gradient(circle at 80% 12%, rgba(244, 114, 182, 0.10), transparent 22%),
+    radial-gradient(circle at bottom center, rgba(250, 204, 21, 0.06), transparent 24%),
+    linear-gradient(180deg, #08111f 0%, #101a2d 44%, #17152c 100%);
+}
+
+::selection {
+  background: rgba(251, 191, 36, 0.35);
+}
+
 /* smoother tap on mobile */
 * {
   -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
 }

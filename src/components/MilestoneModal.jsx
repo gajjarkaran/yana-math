@@ -27,20 +27,22 @@ export default function MilestoneModal({ topic, onClose }) {
       onClick={onClose}
     >
       <div
-        className="bg-white dark:bg-slate-700 rounded-3xl shadow-2xl p-8 max-w-sm w-full text-center"
+        className="bg-gradient-to-br from-white via-yellow-50 to-pink-50 dark:from-[#0d1627] dark:via-[#16182d] dark:to-[#25153c] rounded-[2rem] shadow-2xl p-8 max-w-sm w-full text-center border border-white/80 dark:border-white/10 relative overflow-hidden"
         style={{ animation: 'popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)' }}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="text-6xl sm:text-7xl mb-3 animate-bounce">🎊</div>
-        <div className="inline-block bg-indigo-100 text-indigo-700 text-xs font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-wide">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(250,204,21,0.25),transparent_30%)] pointer-events-none" />
+        <div className="relative text-6xl sm:text-7xl mb-3 animate-bounce">🎊</div>
+        <div className="inline-block bg-indigo-100 text-indigo-700 dark:bg-white/10 dark:text-sky-100 text-xs font-black px-4 py-1.5 rounded-full mb-3 uppercase tracking-[0.18em] shadow-sm border border-indigo-100 dark:border-white/10">
           Topic Complete!
         </div>
-        <h2 className="text-lg sm:text-xl font-bold text-gray-800 dark:text-gray-100 mb-1">{topic}</h2>
-        <p className="text-gray-700 dark:text-gray-300 mt-3 text-sm sm:text-base font-semibold">{msg.line1}</p>
-        <p className="text-gray-400 dark:text-gray-500 mt-1 text-xs sm:text-sm">{msg.line2}</p>
+        <h2 className="text-2xl sm:text-3xl font-black text-slate-800 dark:text-gray-100 mb-1 tracking-tight">{topic}</h2>
+        <p className="text-slate-700 dark:text-gray-300 mt-3 text-sm sm:text-base font-bold">{msg.line1}</p>
+        <p className="text-slate-500 dark:text-gray-400 mt-1 text-xs sm:text-sm">Topic mastered. More challenge cards are waiting.</p>
+        <p className="text-slate-500 dark:text-gray-500 mt-3 text-xs sm:text-sm">{msg.line2}</p>
         <button
           onClick={onClose}
-          className="mt-5 px-8 py-3 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-full text-sm font-bold active:opacity-80 transition-opacity shadow-lg touch-manipulation w-full sm:w-auto"
+          className="mt-6 px-8 py-3 bg-gradient-to-r from-fuchsia-500 via-violet-500 to-sky-500 text-white rounded-full text-sm font-black uppercase tracking-wide active:opacity-80 transition-opacity shadow-lg touch-manipulation w-full sm:w-auto"
         >
           Keep Going! →
         </button>

@@ -6,9 +6,9 @@ A personal math study guide for **Yana Mistry (Grade 6)**. Covers all core US Co
 
 - 7 topics: Fractions, Decimals, Ratios & Proportions, Percentages, Geometry, Integers, Expressions & Equations
 - 15 problems per topic (105 total), all aligned to US Common Core Grade 6 standards
-- Each problem has a "Reveal Answer" button that shows a step-by-step solution
-- After revealing, Yana can mark herself as "Got it 👍" or "Still learning 🤔"
-- Problems can also be manually toggled as done/not done
+- Each problem has a hint-first workflow instead of a reveal-answer shortcut
+- Yana types an answer, and the full solution is only unlocked when it matches
+- Solved problems can still be toggled back to not done for another try
 - Progress is tracked per topic and overall, with a streak counter
 - A confetti celebration fires when a topic is fully completed
 - All progress is saved in the browser (localStorage) — it persists across sessions
